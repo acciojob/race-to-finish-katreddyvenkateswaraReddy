@@ -1,23 +1,17 @@
-window.promises = [];
+ window.promises = [
+    new Promise(resolve => setTimeout(() => resolve('Promise 1 resolved'), getRandomTime())),
+    new Promise(resolve => setTimeout(() => resolve('Promise 2 resolved'), getRandomTime())),
+    new Promise(resolve => setTimeout(() => resolve('Promise 3 resolved'), getRandomTime())),
+    new Promise(resolve => setTimeout(() => resolve('Promise 4 resolved'), getRandomTime())),
+    new Promise(resolve => setTimeout(() => resolve('Promise 5 resolved'), getRandomTime())),
+  ];
 
-// script.js
-const promises = Array.from({ length: 5 }, (_, index) => {
-  // Create promises that resolve after a random time between 1 and 5 seconds
-  return new Promise(resolve => {
-    const randomTime = Math.floor(Math.random() * 5000) + 1000; // Random time between 1 and 5 seconds
-    setTimeout(() => {
-      resolve(`Promise ${index + 1} resolved in ${randomTime / 1000} seconds`);
-    }, randomTime);
-  });
-});
+  Promise.any(window.promises)
+    .then(result => {
+      document.getElementById('output').innerText = result;
+    })
+    .catch(error => console.log(error));
 
-Promise.any(promises)
-  .then(result => {
-    // Print the result to the output div
-    const outputDiv = document.getElementById('output');
-    outputDiv.textContent = result;
-  })
-  .catch(error => {
-    // Handle errors if all promises are rejected
-    console.error('All promises were rejected:', error);
-  });
+  function getRandomTime() {
+    return Math.floor(Math.random() * (5000 - 1000 + 1) + 1000);
+  }
